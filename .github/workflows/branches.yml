@@ -1,0 +1,22 @@
+name: 分支收尾
+
+# 每次推主线时跑：已合并的分支删掉，没人认领的分支点名并变红。
+# 默认分支不叫 main 的仓库，把下面两处 main 改掉。
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  branches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: node scripts/check-branches.mjs
+        env:
+          DEFAULT_BRANCH: main
